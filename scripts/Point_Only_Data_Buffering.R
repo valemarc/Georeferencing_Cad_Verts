@@ -5,8 +5,6 @@
 #required packages
 library(tidyverse)
 library(sf)
-install.packages("rgdal")
-library(rgdal)
 
 ##read in the csv
 baseDir <- "./Tester_2/"
