@@ -56,12 +56,12 @@ filepaths <- paste(baseDir, filenames, sep='')
 convex_hulls <- lapply(filenames,chull)
 
 #write out as a series of new shapefiles
-writeOGR(convex_hulls, dsn = '.', layer = 'mypoints', driver = "ESRI Shapefile")
+writeOGR(convex_hulls, dsn = '.', layer = 'mypoints', driver = "ESRI Shapefile")   #### writeOGR is from rgdal (should use st_write from sf)
 
 #or maybe this will work better?
 {
   dsn <- layer <- gsub(".csv","",i)
-  writeOGR(convex_hulls, dsn, layer, driver="ESRI Shapefile")
+  writeOGR(convex_hulls, dsn, layer, driver="ESRI Shapefile")     #### writeOGR is from rgdal (should use st_write from sf)
 }
 
 
