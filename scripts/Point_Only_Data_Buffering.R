@@ -28,15 +28,18 @@ st_crs(selected_points) #check that CRS is now correct
 #create buffer
 selected_points_buffers <- st_buffer(selected_points, 500)
 
-##project + overlay on basemap
-canada <- gadm(country = "CAN", level = 1, resolution = 2,
+
+
+##project + overlay on basemap                    
+canada <- gadm(country = "CAN", level = 1, resolution = 2,   #### gadm function is undefined
                path = "...Tester_2/")
 plot(canada, add=TRUE)
+
 
 canada_reproj <- st_set_crs(canada, "EPSG:3977") #still need to fix this part
 
 #export buffers as a new shapefile
-writeOGR(selected_points_buffers, dsn = '.', layer = 'poly', driver = "ESRI Shapefile")
+writeOGR(selected_points_buffers, dsn = '.', layer = 'poly', driver = "ESRI Shapefile").      #### writeOGR is from rgdal (should use st_write from sf)
 #not working right now
 
 ###################################################
