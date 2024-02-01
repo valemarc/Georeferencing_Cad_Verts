@@ -20,9 +20,9 @@ data_component%>%
 
 
 #Delete example files
-# files <- c('iris.csv', 'cars.csv')
-# sapply(files, function(x)data_component%>%
-#          osf_ls_files()%>%
-#          filter(name == x)%>%
-#          osf_rm())
-# 
+files <- c('iris.csv', 'cars.csv')
+sapply(files, function(x)data_component%>%
+         osf_ls_files()%>%
+         filter(name == x)%>%
+         osf_rm())
+
