@@ -1,6 +1,7 @@
 ############################
 #Update files to OSF
 ############################
+library(osfr)
 
 #Create an example file locally so we can push it to OSF
 write.csv(iris, file = "iris.csv")
