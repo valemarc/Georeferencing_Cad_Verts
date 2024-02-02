@@ -22,3 +22,12 @@ This repository contains scripts for georeferencing times-series of Canadian ver
 - This script reads shapefiles and subsets polygons based on named places (i.e. parks, watersheds, lakes, cities).
 - Note: There are lots of redundancy in this script with no clear distinction between different the types of places in the data. 
 - required packages: `sp`, `mapview`
+
+## 4. `osf_update_files.R`
+
+- An example script showing how to update files on osf. The example creates .csv files locally and uploads them to OSF. 
+- required packages: `osfr`
+
+
+
+
