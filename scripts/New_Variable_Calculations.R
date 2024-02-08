@@ -4,19 +4,25 @@
 library(tidyverse)
 library(sf)
 library(geodata)
+library(here) #for using relative paths 
 
 ####################################################################
 #####First, read in a folder of polygons you want to work with######
 ####################################################################
 
 #set the text in quotations to the folder that contains the polygons you want to work with
-baseDir <- "./Tester_2/" #@myself change file path once done  testing
-filenames <- list.files("./Tester_2", pattern=".shp") #change file path once done testing
+directory <- here("sample_shp_files")
+
+#List all the files that are to be loaded
+filenames <- data_directory%>%
+  list.files(pattern = '.shp') #pull all names of shp files in the sample_shp_files folder
+
 #might want to change above to pattern= c(".shp",".kml",".gdb")
-filepaths <- paste(baseDir, filenames, sep='')
+filepaths <- paste(directory, filenames, sep = '/')
 
 #Read each shapefile and return a list of sf objects
 listOfShp <- lapply(filepaths, st_read) 
+
 
 #we should check crs information here before merging polygons FIX THIS!!!!!!
 crs_id <- st_crs(listOfShp) 
