@@ -7,7 +7,9 @@ library(tidyverse)
 library(sf)
 
 ##read in the csv
-baseDir <- "./Tester_2/"
+directory <- here("sample_shp_files")
+
+#baseDir <- "./Tester_2/"
 all_points <- read.csv(paste0(baseDir,"/tester_csv_file.csv")) #tester name do this fr later
 
 #define lat and long coordinates
