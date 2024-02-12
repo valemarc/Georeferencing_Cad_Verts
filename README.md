@@ -6,13 +6,16 @@ This repository contains scripts for georeferencing times-series of Canadian ver
 
 ## 1. `New_Variable_Calculations.R`
 
-- This script reads *Polygon* data and calculates relevant spatial statistics such as  areas and centroids. 
+- This script reads shapefiles (*Polygon* data), calculates areas and centroids, and visualizes centroids on a map.
+- Segments Polygons into area bins for categorization, making it ideal for geological data analysis.
+- supports .shp, .kml , .gdb formats
 - required packages: `tidyverse`, `sf`, `geodata`
 
 
 ## 2. `Point_Only_Data_Buffering.R`
 
 - This script creates polygons from *Point only* data. For records with only a single point, a 5km buffer is used to create the polygon. For sources with multiple points, a polygon  is created by fitting the smallest possible polygon that encompasses the set of points (i.e., convex hull). The resulting polygons are then exported as shapefiles for GIS applications.
+- reads CSV files only 
 
 - required packages: `tidyverse`, `sf`, `rgdal` (deprecated and needs update)
 
@@ -20,7 +23,7 @@ This repository contains scripts for georeferencing times-series of Canadian ver
 ## 3. `Subsetting_polygons.R`
 
 - This script reads shapefiles and subsets polygons based on named places (i.e. parks, watersheds, lakes, cities).
-- Note: There are lots of redundancy in this script with no clear distinction between different the types of places in the data. 
+- Note: There are lots of redundancy in this script with no clear distinction between different types of places in the data. 
 - required packages: `sp`, `mapview`
 
 ## 4. `osf_update_files.R`
