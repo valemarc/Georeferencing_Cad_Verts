@@ -24,14 +24,43 @@
 
 
 # Needed libraries #
+library(dplyr)
 library(sf)               # For st_read() and st_write() - reading and creating files
 library(mapview)          # For mapview - viewing shp polygon coordinates in a map
+library(here)
 
 
-## Check your current working directory and set it to your desired folder
-getwd()               # Check it
-# Ctrl + Shift + H    # Choose the corresponding LPIC_files folder
-getwd()               # Check that it has changed
+
+########     Subsetting function     ########
+
+subset_polygons <- function(feature, polygon_name = NULL, view = FALSE){
+  
+  #Filter if names are supplied
+  if (!is.null(polygon_name) || length(polygon_name) != 0) {
+    
+    feature <- feature%>%
+      filter(Name %in% polygon_name)
+    
+    
+  }
+  
+  #View
+  if(view == TRUE){
+    feature%>%
+      st_zm()%>%
+      mapview()
+    
+  }
+  
+  #Return feature otherwise
+  else{
+    
+    return(feature)
+  }
+}
+  
+
+
 
 
 ###############################################################################
@@ -42,17 +71,22 @@ getwd()               # Check that it has changed
 
 
 # Reading the shapefile into the R environment as a Spatial object.
-pp_pa <- sf::st_read("source_kml_shp/ProtectedAreas_CPCAD_Trial.shp")
-ogrListLayers("source_kml_shp/ProtectedAreas_CPCAD_Trial.shp")
+pp_pa <- here("tabular_shapefiles")%>%
+  here("KML_SHP")%>%
+  here("ProtectedAreas_CPCAD_Dec2021.shp")%>%
+  sf::st_read()
+
+#ogrListLayers("source_kml_shp/ProtectedAreas_CPCAD_Trial.shp") #deprecated function from rgdal?? (Will)
 
 # Create a data frame with only the names contained in the shapefile.
 #       NOTE: You can filter it to find the one you're looking for.
-pp_pa_names <- as.data.frame(sort(pp_pa$Name))
-View(pp_pa_names)
+pp_pa_names <- data.frame(Name = pp_pa$Name)%>%
+  arrange(Name)
+
 
 # Copy and paste the name from the names table between the " " (Name == "paste-here").
 #         This creates a subset of only the region in the specified name.
-new_polygon <- subset(pp_pa, Name == "paste-here")
+new_polygon <- subset(pp_pa, Name == "Opavsky")
 
 # Check the number of elements in new_polygon. If you don't get a 1, go to the 
 #       OPTIONAL STEP - Splitting polygons.
@@ -73,6 +107,7 @@ mapview(new_polygon)
 split_pol <- new_polygon[1,] 
 split_pol2 <- new_polygon[2,]
 split_pol3 <- new_polygon[3,]
+
 mapview(split_pol)       # Change the split_pol to view all the new variables
 new_polygon <- split_pol # Change the split_pol to the right number
 
