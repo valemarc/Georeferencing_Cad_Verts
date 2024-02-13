@@ -31,6 +31,7 @@ This repository contains scripts for georeferencing times-series of Canadian ver
 - This script contains functions to download and uploading files to OSF 
 - `download_osf_files()` This function downloads all files of a `component` in an OSF `project`. The `project` argument takes the output of a `osf_retrieve_node()` call and the `project` is the character string that specifies the namne of the component that is to be downloaded
 - `upload_osf_files()` This function uploads files into the `componeent` of an OSF `project` where files are specified by the a character string that specifies the names of objects to be uploaded
+- NOTE: accessing OSF requires authentication which is done by providing a PAT. Currently, the key is stored locally in the .Renviron document for security purposes. 
 
 - required packages: `osfr`
 
