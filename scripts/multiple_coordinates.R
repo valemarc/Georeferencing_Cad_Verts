@@ -11,13 +11,14 @@ library(sf)
 ## SE: using the first few rows of data in the CIEE_Canada_data_upload.csv file
 all_points <- read_csv("../CIEE_Canada_data_upload.csv")
 all_points <- all_points[1:10, ]
+
 # SE: adding the Spatial_source column for test purposes - making up the data
 # delete this line of code eventually
 all_points$Spatial_source = rep("multiple coordinates", 10)
 
 # filter by Spatial_source column for records with multiple coordinates
 selected_points <- all_points %>%
-  dplyr::filter(Spatial_source == "single coordinates")
+  dplyr::filter(Spatial_source == "multiple coordinates")
 
 ###################################################
 #####Creating a convex hull for multiple points####
