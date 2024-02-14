@@ -33,14 +33,27 @@ library(here)
 
 ########     Subsetting function     ########
 
-subset_polygons <- function(feature, polygon_name = NULL, view = FALSE){
+subset_polygons <- function(feature, type = c('Parks', 'Watershed', 'Cities'), polygon_name = NULL, view = FALSE){
   
   #Filter if names are supplied
   if (!is.null(polygon_name) || length(polygon_name) != 0) {
     
-    feature <- feature%>%
-      filter(Name %in% polygon_name)
-    
+    if (type == "Parks"){
+      
+      feature <- feature%>%
+        filter(Name %in% polygon_name)
+      
+    } else if (type == "Watershed"){
+      
+      feature <- feature%>%
+        filter(NOM %in% polygon_name)
+      
+    } else {
+      
+      feature <- feature%>%
+        filter(CSDNAME %in% polygon_name)
+      
+    }
     
   }
   
@@ -60,6 +73,20 @@ subset_polygons <- function(feature, polygon_name = NULL, view = FALSE){
 }
   
 
+
+
+# Example of use --------------
+# Read
+# shape_files <- here("tabular_shapefiles/KML_SHP")%>%
+#   list.files(".shp")%>%
+#   sapply(function(x)paste0(here("tabular_shapefiles/KML_SHP/"), x)%>%
+#         read_sf())
+# # Polygons to subset
+# rand_subset <- shape_files$CensusSubdivisions_lcsd000b16a_e.shp$CSDNAME%>%sample(100)
+# 
+# # Subset
+# subset_polygons(feature = shape_files$CensusSubdivisions_lcsd000b16a_e.shp,
+#                 type = c("Cities"), polygon_name = rand_subset, view = TRUE)
 
 
 
