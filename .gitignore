@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+.Renviron
+osf_data/
+outdata/
+rawdata/
+tabular_shapefiles/
