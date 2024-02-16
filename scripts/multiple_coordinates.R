@@ -9,7 +9,8 @@ library(sf)
 # read in csv file
 
 ## SE: using the first few rows of data in the CIEE_Canada_data_upload.csv file
-all_points <- read_csv("../CIEE_Canada_data_upload.csv")
+all_points <- here("rawdata/CIEE_Canada_data_upload.csv")%>%
+  read_csv()
 all_points <- all_points[1:10, ]
 
 # SE: adding the Spatial_source column for test purposes - making up the data
@@ -31,7 +32,7 @@ baseDir <- "./Tester_2/" #@myself change file path once done  testing
 filenames <- list.files("./Tester_2", pattern=".csv")
 filepaths <- paste(baseDir, filenames, sep='')
 
-convex_hulls <- lapply(filenames,chull)
+convex_hulls <- lapply(filenames,chull) # WO: chull doesn't work for sf objcts, need to making a multipolygon (st_union) and then compute the convex hull (st_convex_hull)
 
 #write out as a series of new shapefiles
 writeOGR(convex_hulls, dsn = '.', layer = 'mypoints', driver = "ESRI Shapefile")   #### writeOGR is from rgdal (should use st_write from sf)
@@ -42,3 +43,23 @@ writeOGR(convex_hulls, dsn = '.', layer = 'mypoints', driver = "ESRI Shapefile")
   writeOGR(convex_hulls, dsn, layer, driver="ESRI Shapefile")     #### writeOGR is from rgdal (should use st_write from sf)
 }
 
+
+
+#Convex hull function -----
+convex_hull <- function(data, crs = 4269){
+
+  #Project data
+  project <- sf::st_as_sf(data, coords = c("Longitude", "Latitude"), crs = crs)
+
+  #Merge into a multipolygona and compute hull
+  project%>%
+    st_union()%>%
+    st_convex_hull()
+
+
+
+}
+
+#Example use
+# selected_points%>%
+#   convex_hull
