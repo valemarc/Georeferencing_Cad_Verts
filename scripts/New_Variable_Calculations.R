@@ -4,14 +4,15 @@
 library(tidyverse)
 library(sf)
 library(geodata)
-library(here) #for using relative paths 
+library(here) #for using relative paths
+library(mapview)
 
 ####################################################################
 #####First, read in a folder of polygons you want to work with######
 ####################################################################
 
 #set the text in quotations to the folder that contains the polygons you want to work with
-directory <- here("sample_shp_files")
+data_directory <- here("tabular_shapefiles/KML_SHP")
 
 #List all the files that are to be loaded
 filenames <- data_directory%>%
@@ -21,14 +22,15 @@ filenames <- data_directory%>%
 filepaths <- paste(directory, filenames, sep = '/')
 
 #Read each shapefile and return a list of sf objects
-listOfShp <- lapply(filepaths, st_read) 
+listOfShp <- lapply(filepaths, st_read)
 
 
 #we should check crs information here before merging polygons FIX THIS!!!!!!
-crs_id <- st_crs(listOfShp) 
-view(crs_id) 
+crs_id <- st_crs(listOfShp)
+view(crs_id)
+
 #this doesn't really work because we can't see the crs information for a list or a vector
-#we can only see it once its a multipolygon 
+#we can only see it once its a multipolygon
 
 #repojecting into a common crs so that we can merge as one multipolygon
 listOfShp_reproj <- lapply(listOfShp, function(x) {st_crs(x) <- 3977; x})
