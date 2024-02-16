@@ -19,7 +19,7 @@ filenames <- data_directory%>%
   list.files(pattern = '.shp') #pull all names of shp files in the sample_shp_files folder
 
 #might want to change above to pattern= c(".shp",".kml",".gdb")
-filepaths <- paste(directory, filenames, sep = '/')
+filepaths <- paste(data_directory, filenames, sep = '/')
 
 #Read each shapefile and return a list of sf objects
 listOfShp <- lapply(filepaths, st_read)
