@@ -5,10 +5,12 @@
 #required packages
 library(tidyverse)
 library(sf)
+library(here)
 
 # Read in dataset with coordinates
 ## SE: using the first few rows of data in the CIEE_Canada_data_upload.csv file
-all_points <- read_csv("../CIEE_Canada_data_upload.csv")
+all_points <- here("rawdata/CIEE_Canada_data_upload.csv")%>%
+  read_csv()
 all_points <- all_points[1:10, ]
 # SE: adding the Spatial_source column for test purposes - making up the data
 # delete this line of code eventually
