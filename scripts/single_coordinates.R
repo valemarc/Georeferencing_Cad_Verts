@@ -42,3 +42,50 @@ selected_points_buffers <- selected_points_buffers %>%
 sf::st_write(selected_points_buffers,
              "../test_shapefiles.shp", driver = "ESRI Shapefile", append=FALSE)
 
+
+#Function for adding buffers, visualizing, and exporting
+add_buffers <- function(data, crs = 4269, buffer_radius = 500, file_name = NULL, view = FALSE){
+
+  #buffer_radius units are usually in meters but can depend on CRS
+  #file_name is the filename to export the output, if NULL then no file is exported
+  #view plots the buffers using mapview for visual inspection
+
+  project_data <- sf::st_as_sf(data, coords = c("Longitude", "Latitude"), crs = crs)
+  buffers <- sf::st_buffer(data, buffer_radius)
+
+  if(view == TRUE){
+
+    buffers%>%
+      select(geometry)%>%
+      mapview()
+
+  }else{
+
+    out <- buffers%>%
+      select(ID, geometry)
+
+    if(!is.null(file_name)){
+
+      if(!is.character(file_name)){
+        stop("file_name must be a charcater string")
+
+      }
+      #output directory
+      out_dir <- paste0(here("outdata/", file_name))
+      #Write file
+      sf::st_write(out, out_dir, driver = "ESRI Shapefile", append = FALSE)
+
+    }else{
+
+      #return buffers
+      return(out)
+    }
+
+  }
+
+}
+
+
+
+
+
