@@ -94,28 +94,30 @@ allpolys$area_bin <- as.factor(ifelse(area<10, '<10',
                                                                   '>100000'))))))
 
 
-
+################################
 #Generalized spatial statistics function
-spatial_statistics <- function(sf_object){
+################################
+spatial_statistics <- function(sf_object, map = FALSE){
 
   #Turn spherical geometry off
   sf::sf_use_s2(FALSE)
 
   #Area
-  Area <- sf_object%>%
-    sf::st_area
+  Area <- sf::st_area(sf_object)
 
   #Centroids
-  Centroid <- sf_object%>%
-    sf::st_centroid()%>%
-    sf::st_coordinates()%>%
+  ct <- sf::st_centroid(sf_object)
+
+  #Centroid cooridnates
+  coordinates <- sf::st_coordinates(ct)%>%
     as.data.frame()%>%
     rename(`Centroid_Latitude` = X)%>%
     rename(`Centroid_Longitude` = Y)
 
+
   #Combine
   out <-  data.frame(Area_sqkm = units::set_units(Area, km^2))%>%
-    bind_cols(Centroid)%>%
+    bind_cols(coordinates)%>%
     mutate(Area_bin = case_when(
       Area_sqkm  < units::set_units(10, km^2) ~ '<10',
       Area_sqkm  < units::set_units(10^2, km^2) ~ '<10^2',
@@ -125,14 +127,21 @@ spatial_statistics <- function(sf_object){
       TRUE ~ '10^6')
     )
 
-  return(out)
+  if(map == TRUE){
+    mapview(ct)
+  }else{
+    return(out)
 
-
+  }
 
 }
 
-
-
+# Example of use --------------
+# here("tabular_shapefiles/KML_SHP")%>%
+#   list.files(pattern = '.shp', full.names = TRUE)%>%
+#   sample(1)%>%
+#   read_sf%>%
+#   spatial_statistics(shp_file, map = FALSE)
 
 
 
