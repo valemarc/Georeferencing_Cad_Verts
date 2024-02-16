@@ -40,10 +40,10 @@ allpolys <- do.call(what = sf:::rbind.sf, args=listOfShp_reproj)
 #####Calculate Areas####
 ########################
 
-#calculating area for each polygon in the allpolys multipolygon 
-allpolys$area_sqkm <- st_area(allpolys) 
+#calculating area for each polygon in the allpolys multipolygon
+allpolys$area_sqkm <- st_area(allpolys) # this calculates square METER
 #checking to make sure that there are the same number of unique values as there are polygons in allpolys (13 in the case of the tester files)
-unique(allpolys$area_sqkm) 
+unique(allpolys$area_sqkm)
 
 #######################
 ##Calculate Centroids##
@@ -68,7 +68,7 @@ centroid_coordinates <- lapply(centroid_only,st_centroid_coords)
 ####Plot Basemap for Centroid###
 ################################
 
-#need to figure out how to reproject this still 
+#need to figure out how to reproject this still
 
 #load canadian basemap (but this can be done for every country)
 canada <- gadm(country = "CAN", level = 1, resolution = 2,
@@ -87,9 +87,47 @@ area <- allpolys$area_sqkm
 allpolys$area_bin <- as.factor(ifelse(area<10, '<10',
                                       ifelse(area<100, '<100',
                                              ifelse(area<1000, '<1000',
-                                                    ifelse(area<10000, '<10000', 
+                                                    ifelse(area<10000, '<10000',
                                                            ifelse(area<100000,'<100000',
                                                                   '>100000'))))))
+
+
+
+#Generalized spatial statistics function
+spatial_statistics <- function(sf_object){
+
+  #Turn spherical geometry off
+  sf::sf_use_s2(FALSE)
+
+  #Area
+  Area <- sf_object%>%
+    sf::st_area
+
+  #Centroids
+  Centroid <- sf_object%>%
+    sf::st_centroid()%>%
+    sf::st_coordinates()%>%
+    as.data.frame()%>%
+    rename(`Centroid_Latitude` = X)%>%
+    rename(`Centroid_Longitude` = Y)
+
+  #Combine
+  out <-  data.frame(Area_sqkm = units::set_units(Area, km^2))%>%
+    bind_cols(Centroid)%>%
+    mutate(Area_bin = case_when(
+      Area_sqkm  < units::set_units(10, km^2) ~ '<10',
+      Area_sqkm  < units::set_units(10^2, km^2) ~ '<10^2',
+      Area_sqkm  < units::set_units(10^3, km^2) ~ '<10^3',
+      Area_sqkm  < units::set_units(10^4, km^2) ~ '<10^4',
+      Area_sqkm  < units::set_units(10^5, km^2) ~ '<10^5',
+      TRUE ~ '10^6')
+    )
+
+  return(out)
+
+
+
+}
 
 
 
