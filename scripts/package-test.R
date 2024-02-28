@@ -7,7 +7,7 @@ library(dplyr)
 
 #Link OSF --------------------------
 project_ID <- "mjvwh" #project ID
-PAT_KEY = "###" #Personal Access Token
+PAT_KEY = "###" #Personal Access Token (insert your own PAT here)
 project <- osf_setup(project_ID = project_ID, PAT = PAT_KEY) #Connection
 
 #Download --------------------------
@@ -56,5 +56,6 @@ ts_data%>%
 
 
 #Uploading  --------------------------
+#this uploads everything locally to the OSF
 #osf_updating(project = project, component = "Data", type = 'upload')
 
