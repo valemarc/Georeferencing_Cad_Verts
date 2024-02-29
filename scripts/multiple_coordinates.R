@@ -11,7 +11,7 @@ library(sf)
 ## SE: using the first few rows of data in the CIEE_Canada_data_upload.csv file
 all_points <- here("rawdata/CIEE_Canada_data_upload.csv")%>%
   read_csv()
-all_points <- all_points[1:10, ]
+#all_points <- all_points[1:10, ]
 
 # SE: adding the Spatial_source column for test purposes - making up the data
 # delete this line of code eventually
@@ -51,7 +51,7 @@ convex_hull <- function(data, crs = 4269){
   #Project data
   project <- sf::st_as_sf(data, coords = c("Longitude", "Latitude"), crs = crs)
 
-  #Merge into a multipolygona and compute hull
+  #Merge into a multipolygon and compute hull
   project%>%
     st_union()%>%
     st_convex_hull()
@@ -60,6 +60,15 @@ convex_hull <- function(data, crs = 4269){
 
 }
 
-#Example use
-# selected_points%>%
-#   convex_hull
+
+
+
+
+
+
+
+
+
+
+
+
